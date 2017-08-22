@@ -1,0 +1,18 @@
+{
+  "name": "networkmonitor",
+  "version": "0.0.2",
+  "description": "A Simple Network Monitor Application",
+  "author": "Veda Vyas <vy@fju.us>",
+  "main": "main.js",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.5.5",
+    "angular-animate": "^1.5.5",
+    "angular-aria": "^1.5.5",
+    "angular-material": "^1.0.8",
+    "bootstrap": "^3.3.7",
+    "electron-squirrel-startup": "^1.0.0",
+    "jquery": "^3.2.1",
+    "winston": "^2.2.0"
+  }
+}

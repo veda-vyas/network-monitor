@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Network Monitor</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <style type="text/css">
+      .glyphicon.glyphicon-ok {
+        color: green;
+        font-size: 25px;
+      }
+      .glyphicon.glyphicon-remove {
+        color: red;
+        font-size: 25px;
+      }
+    </style>
+  </head>
+  <body class="container-fluid" style="background-color: #eee">
+    <div class="row">
+      <h1 class="col-sm-8 col-md-8">Network Monitor</h1>
+      <div id="updatefield" class="col-sm-4 col-md-4 text-right text-sm-left"><br></div>
+    </div><hr style="border-top: 1px solid black">
+    <div id="messages"></div>
+    <div class="row">
+      <div class="col-sm-3 col-md-3"></div>
+      <div id="content" class="col-sm-6 col-md-6 panel">
+        <h3 class="text-center">Report Issue</h3>
+        <hr>
+      </div>
+      <div class="col-sm-3 col-md-3"></div>
+    </div>
+  </body>
+  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script src="./renderer.js"></script>
+  <script type="text/javascript">
+      const {ipcRenderer} = require('electron');
+      ipcRenderer.on('update-message', function(event, text) {
+        $("#messages").html(text);
+        console.log(text)
+      });
+      ipcRenderer.on('report-success', function(event, text) {
+        $("#content").html('<br><div class="text-center"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span><div>');
+        $("#content").append('<h3 class="text-center">'+text+'</h3>');
+        console.log(text);
+      });
+      ipcRenderer.on('report-error', function(event, text) {
+        $("#content").html('<br><div class="text-center"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span><div>');
+        $("#content").append('<h3 class="text-center">'+text+'</h3>');
+        $("#content").append('<div class="text-center">(Press Ctrl+R to Refresh and submit again.)</div><br>');
+        console.log(text);
+      });
+  </script>
+</html>
