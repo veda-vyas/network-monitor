@@ -65,27 +65,47 @@ app.on('window-all-closed', function() {
   app.quit();
 });
 
+const TrayWindow  = require('./TrayWindow');
+const TrayIcon = require('./TrayIcon');
+
+let tray = null;
+let trayIcon = null;
+global.rollno = "123456";
+
+// app.dock.hide();
+
 // When application is ready, create application window
 app.on('ready', function() {
 
     logger.debug("Starting application");
 
-    // Create main window
-    mainWindow = new BrowserWindow({
-        name: "homepage",
-        width: 800,
-        height: 600,
-        toolbar: false
-    });
+    if(rollno!=""){
+        // Create Tray Window
+        tray = new TrayWindow();
+        mainWindow = tray.window;
+        trayIcon = new TrayIcon(tray.window);    
+    }else{
+        
+        // Create Tray Window
+        tray = new TrayWindow();
+        trayIcon = new TrayIcon(tray.window);
 
-    // Target HTML file which will be opened in window
-    mainWindow.loadURL('file://' + __dirname + "/index.html");
+        // Create main window
+        mainWindow = new BrowserWindow({
+            name: "homepage",
+            width: 800,
+            height: 600,
+            toolbar: false
+        }); 
+        // Target HTML file which will be opened in window
+        mainWindow.loadURL('file://' + __dirname + "/index.html");
 
-    // Cleanup when window is closed
-    mainWindow.on('closed', function() {
-        mainWindow = null;
-    });
+        // Cleanup when window is closed
+        mainWindow.on('closed', function() {
+            mainWindow = null;
+        });
 
+    }
     ipcMain.on('save-and-report', function(event,object) {
         logger.debug(object);
         if (object.rollno == ""){
@@ -100,5 +120,9 @@ app.on('ready', function() {
         logger.debug("Checking for updates: " + feedURL);
         autoUpdater.checkForUpdates();
     });
+});
 
+ipcMain.on('quit-app', function() {
+  tray.window.close(); 
+  app.quit();
 });

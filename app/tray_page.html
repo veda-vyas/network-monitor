@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <script type='text/javascript'>
+      const remote = require('electron').remote
+      const main = remote.require('./main.js') 
+    </script>
+    <style type="text/css">
+      .btn-circle.btn-xl {
+        width: 70px;
+        height: 70px;
+        padding: 10px 16px;
+        font-size: 24px;
+        line-height: 1.33;
+        border-radius: 35px;
+      }
+      .glyphicon.glyphicon-ok {
+        color: green;
+        font-size: 25px;
+      }
+      .glyphicon.glyphicon-remove {
+        color: red;
+        font-size: 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="display:flex;justify-content:center;align-items:center;">
+      <div id="content">
+        <button id='my-button' type="button" class="btn btn-primary btn-circle btn-xl"><i class="glyphicon glyphicon-cloud-upload"></i></button>
+      </div>
+    </div>
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type='text/javascript'>
+      const {ipcRenderer} = require('electron');    
+      var rollno = remote.getGlobal('rollno');
+      document.getElementById("my-button").addEventListener('click', () => {
+        ipcRenderer.send('save-and-report',{"rollno":rollno,"timestamp":Date.now()});
+      }, false)
+      
+      ipcRenderer.on('report-success', function(event, text) {
+        let notif = new window.Notification( 'Network Stats Submitted')
+        notif.onclick = function () {
+          window.ipcRenderer.send('show-about-window-event')
+        }
+        // console.log(text);
+      });
+      
+      ipcRenderer.on('report-error', function(event, text) {
+        let notif = new window.Notification( 'Network Stats Not Submitted')
+        notif.onclick = function () {
+          window.ipcRenderer.send('show-about-window-event')
+        }
+        console.log(text);
+      });
+    </script>
+
+  </body>
+</html>

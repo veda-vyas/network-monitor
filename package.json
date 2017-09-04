@@ -26,6 +26,7 @@
     "bootstrap": "^3.3.7",
     "copyfiles": "~1.0.0",
     "electron-builder": "5.12.X",
+    "electron-positioner": "^3.0.0",
     "electron-prebuilt": "~1.2.X",
     "jquery": "^3.2.1",
     "live-reload": "~1.1.0",
